@@ -1,0 +1,3 @@
+PARA COMPILAR UM ARQUIVO ESCRITO EM C
+
+gcc [arquivo a ser compilado] -o [arquivo de destino]

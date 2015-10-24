@@ -1,0 +1,16 @@
+PARA QUEBRAR SENHAS COM O JOHN
+
+- SALVE AS HASHS EM UM ARQUIVO TEXTO 
+- EXECUTE O SEGUINTE COMANDO
+
+john [nome do arquivo]
+
+- PARA USAR COM A WORDLIST DEFAULT DO JOHN OU OUTRA WORDLIST QUALQUER
+
+john 1415747342.58.txt --wordlist=/usr/share/john/password.lst
+
+- A FERRAMENTA PODERÁ SOLICITAR OS PARÂMETRO PARA OUTROS FORMATOS DE HASHES
+
+john 1415747342.58.txt --format=nt --wordlist=/usr/share/john/password.lst
+
+BASTA EXECUTAR NOVAMENTE COM O  --format informado no retorno do comando.

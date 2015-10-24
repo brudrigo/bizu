@@ -1,0 +1,5 @@
+COMANDO PARA EXECUTAR UM SCAN DE PROTOCOLOS ARP NA REDE DA MÁQUINA
+------------------------------------------------------------------
+
+netdisconver - r [range de ips] -i [interface da rede]
+netdiscover -r 10.0.0.0/24 -i vmnet8

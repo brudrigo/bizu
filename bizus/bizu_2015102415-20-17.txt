@@ -1,0 +1,8 @@
+COMANDO PARA CHECAR SNMP
+
+snmpcheck -t 10.0.0.1
+_______________________________________________________
+
+COMANDO PARA USAR DICIONÁRIO DE COMUNIDADES CONHECIDAS
+
+onesixtyone 10.0.0.1 -c /usr/share/doc/onesixtyone/dict.txt

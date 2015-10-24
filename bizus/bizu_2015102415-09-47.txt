@@ -1,0 +1,6 @@
+PARA PESQUISAR POR UM EXPLOIT PELA LINHA DE COMANDO EXECUTAR OS SEGUINTES PASSOS
+
+----------------------------------------------------
+cd /usr/share/exploitdb
+./searchexploit [parametro para pesquisa do exploit]
+---------------------------------------------------

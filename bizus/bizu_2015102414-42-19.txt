@@ -1,0 +1,5 @@
+MELHORAR O SHELL OBTIDO COM PYTHON
+
+É INTERESSANTE QUANDO SE TEM UM SHELL CACHORRO
+
+python -c 'import pty; pty.spawn("/bin/sh")'

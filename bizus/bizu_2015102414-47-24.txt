@@ -1,0 +1,7 @@
+COMANDO PARA CONECTAR POR TELNET
+--------------------------------
+telnet [ENDEREÇO] [PORTA]
+
+COMANDO PARA PEGAR O CABEÇALHO DO SERVICO
+-----------------------------------------
+GET / HTTP/1.1 

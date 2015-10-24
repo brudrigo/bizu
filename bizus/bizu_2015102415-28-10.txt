@@ -1,0 +1,3 @@
+##	TESTE FTP ANÔNIMO
+
+$ nmap -v -p 21 --script=ftp-anom.nse <rede>

