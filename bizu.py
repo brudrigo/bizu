@@ -63,7 +63,7 @@ def inicial():
     print('|   [edit|e]   - Editar arquivo de dica                    |')
     print('|   [ls]       - Listar bizus cadastrados                  |')
     print('|   [menu]     - Listar opções de comandos                 |')
-    print('|   [show]     - Mostra o bizu (Ex. show 50)               |')
+    print('|   [print|p]  - Mostra o bizu (Ex. p 50)                  |')
     print('|   [sair]     - sair do script                            |')
     print('+----------------------------------------------------------+')
     print('\n')
@@ -154,7 +154,7 @@ def edit():
 
 # LISTA DOS COMANDOS DESTA TELA
 dict = {"add": add, "exit": exit, "help": ajuda, "menu": clear, "sair": back, "search": search, "s": search, "ls": search,
-        "del": excluir_bizu, "show": show_bizu, "edit": edit, "e": edit}
+        "del": excluir_bizu, "print": show_bizu, "p": show_bizu, "edit": edit, "e": edit}
 
 
 def comando(x):
