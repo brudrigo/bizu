@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="Bizu" uuid="242491a6-d5d0-44e5-8002-c6153e766acf">
+      <secret-storage>master_key</secret-storage>
+      <first-sync>true</first-sync>
+    </data-source>
+    <data-source name="data" uuid="c8f07470-ee85-4f4f-a152-614916d71a29" />
+    <data-source name="SQLite - BIZU" uuid="e8e375ca-1ea8-4e45-84c7-196b1d5e8063">
+      <secret-storage>master_key</secret-storage>
+    </data-source>
+  </component>
+</project>
