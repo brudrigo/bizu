@@ -8,7 +8,8 @@ import time
 import datetime
 
 #configurar o editor padrão
-editor = 'subl'
+os.system("clear")
+editor = raw_input('Qual editor de texto você gostaria de utilizar?\n')
 
 ############################################################################
 ################### CONEXÃO COM O BANCO DE DADOS ###########################
