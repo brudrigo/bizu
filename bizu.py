@@ -119,7 +119,7 @@ def show_bizu():
             print("O bizu solicitado não foi encontrado! tente novamente!")
         else:
             os.system('clear')
-            os.system('cat ./bizus/%s' % projetol[2])
+            os.system('cat ./bizus/%s | more' % projetol[2])
             print('\n')
     except Exception, e:
         print('não foi possível mostrar o conteúdo do bizú selecionado!')
