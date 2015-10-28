@@ -14,7 +14,7 @@ editor = raw_input('Qual editor de texto você gostaria de utilizar?\n')
 ############################################################################
 ################### CONEXÃO COM O BANCO DE DADOS ###########################
 ############################################################################
-db = sqlite3.connect('data.db')
+db = sqlite3.connect('/etc/bizu/data.db')
 cursor = db.cursor()
 
 def select_list(sch):

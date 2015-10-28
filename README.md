@@ -6,7 +6,7 @@ Com o BIZU você poderá salvar informações úteis que poderá necessitar post
 ### INSTALAÇÂO
 
 - git clone https://github.com/brudrigo/bizu
-- cd bizu
-- ln -s [endereço completo para o arquivo bizu.py na pasta bizu] /usr/bin/bizu
+- mv bizu /etc/bizu
+- ln -s /etc/bizu/bizu.py /usr/bin/bizu
 
 pronto, para utilizar basta digitar bizu na linha de comando
