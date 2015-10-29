@@ -92,7 +92,7 @@ def add():
     time.sleep(3)
     ts = time.time()
     arq = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d%H-%M-%S')
-    os.system("%s ./bizus/bizu_%s.txt" % (editor, arq))
+    os.system("%s /etc/bizu/bizus/bizu_%s.txt" % (editor, arq))
     criar_cont(titulo, pchaves, "bizu_%s.txt" % arq)
 
 
@@ -119,7 +119,7 @@ def show_bizu():
             print("O bizu solicitado não foi encontrado! tente novamente!")
         else:
             os.system('clear')
-            os.system('cat ./bizus/%s | more' % projetol[2])
+            os.system('cat /etc/bizu/bizus/%s | more' % projetol[2])
             print('\n')
     except Exception, e:
         print('não foi possível mostrar o conteúdo do bizú selecionado!')
@@ -150,7 +150,7 @@ def edit():
     pam = parametros.split(' ')
     idt = pam[1]
     projetol = select_ln('bizu', "WHERE id='%s'" % idt)
-    os.system("%s ./bizus/%s" % (editor, projetol[2]))
+    os.system("%s /etc/bizu/bizus/%s" % (editor, projetol[2]))
 
 
 # LISTA DOS COMANDOS DESTA TELA
