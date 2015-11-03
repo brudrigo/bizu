@@ -8,5 +8,6 @@ Com o BIZU você poderá salvar informações úteis que poderá necessitar post
 - git clone https://github.com/brudrigo/bizu
 - mv bizu /etc/bizu
 - ln -s /etc/bizu/bizu.py /usr/bin/bizu
+- sudo bizu
 
-pronto, para utilizar basta digitar bizu na linha de comando
+Enjoy!
