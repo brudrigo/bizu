@@ -1,0 +1,25 @@
+MACETEIRO WIRESHARK
+
+http://packetlife.net/media/library/13/Wireshark_Display_Filters.pdf
+
+Show only SMTP (port 25) and ICMP traffic:
+
+ tcp.port eq 25 or icmp
+Show only traffic in the LAN (192.168.x.x), between workstations and servers -- no Internet:
+
+ip.src==192.168.0.0/16 and ip.dst==192.168.0.0/16
+TCP buffer full -- Source is instructing Destination to stop sending data
+
+ tcp.window_size == 0 && tcp.flags.reset != 1
+Filter on Windows -- Filter out noise, while watching Windows Client - DC exchanges
+
+ smb || nbns || dcerpc || nbss || dns
+Sasser worm: --What sasser really did--
+
+  ls_ads.opnum==0x09
+Match packets containing the (arbitrary) 3-byte sequence 0x81, 0x60, 0x03 at the beginning of the UDP payload, skipping the 8-byte UDP header. Note that the values for the byte sequence implicitly are in hexadecimal only. (Useful for matching homegrown packet protocols.)
+
+  udp[8:3]==81:60:03
+The "slice" feature is also useful to filter on the vendor identifier part (OUI) of the MAC address, see the Ethernet page for details. Thus you may restrict the display to only packets from a specific device manufacturer. E.g. for DELL machines only:
+
+  eth.addr[0:3]==00:06:5B

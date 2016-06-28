@@ -1,0 +1,3 @@
+Usar o smtp-user-enum
+
+smtp-user-enum -M VRFY -U (lista de nomes) -t kali.com.br(alvo servidor smtp)

