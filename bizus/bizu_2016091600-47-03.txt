@@ -1,0 +1,8 @@
+Ferramenta para extração de dados de um smartphone android
+
+- conectar o dispositivo
+- ativar o debug do usb
+- abrir o aflogical
+- instalar app no phone
+- extrair dados
+- analisar dados no computador

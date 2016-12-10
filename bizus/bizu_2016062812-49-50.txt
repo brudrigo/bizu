@@ -1,0 +1,34 @@
+#### PROCURAR EXPLOITS PELO TERMINALS ####
+	$ cd /usr/share/exploitdb
+	$ searchexploit "termo"
+
+
+#### PASSWORD LISTS ####
+
+	$ cd /usr/share/wordlist
+	$ gunzip rockyou.txt.gz
+
+	/usr/share/wordlist/rockyou.txt
+	/root/Documentos/dicts/eb.txt
+	/usr/share/john/password.lst
+	/usr/share/metasploit-framework/data/john/wordlists/password.lst
+	/usr/share/metasploit-framework/data/wordlists
+	/usr/share/metasploit-framework/data/john/wordlists/common_roots.txt
+
+	dirb -> /usr/share/dirb/wordlists
+	dirbuster -> /usr/share/dirbuster/wordlists
+	dnsmap.txt -> /usr/share/dnsmap/wordlist_TLAs.txt
+	fasttrack.txt -> /usr/share/set/src/fasttrack/wordlist.txt
+	fern-wifi -> /usr/share/fern-wifi-cracker/extras/wordlists
+	metasploit -> /usr/share/metasploit-framework/data/wordlists
+	metasploit-jtr -> /usr/share/metasploit-framework/data/john/wordlists
+	nmap.lst -> /usr/share/nmap/nselib/data/passwords.lst
+	sqlmap.txt -> /usr/share/sqlmap/txt/wordlist.txt
+	termineter.txt -> /usr/share/termineter/framework/data/smeter_passwords.txt
+	wfuzz -> /usr/share/wfuzz/wordlist
+
+	- Contar palavras:
+		$ wc -l LISTA
+
+	- Pegar palavras do diconário com minimo e máximo de caracteres
+		$ cat rockyou.txt | sort | uniq | pw-inspector -m 8 -M 63 > kalitut.txt

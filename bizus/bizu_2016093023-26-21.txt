@@ -1,0 +1,41 @@
+CONECTAR AO ALVO
+	
+	rpcclient 10.10.10.1 -U usuario
+
+ENUMERAR USUÁRIOS
+	
+	$> enumdomusers
+
+INFORMAÇÕES DO SISTEMA
+	
+	$> srvinfo
+
+TABELA DE S.O
+
+	Windows 8 - 6.2
+	Windows Sv 2012 - 6.2
+	Windows 7 - 6.1
+	Windows Sv 2008 R2 - 6.1
+	Windows Sv 2008 - 6.0
+	Windows Vista - 6.0
+	Windows Sv 2003 R2 - 5.2
+	Windows Sv 2003 - 5.2
+	Windows XP 64 - Bit Edition - 5.2
+	Windows XP - 5.1
+	Windows 2000 - 5.0
+
+IDENTIFICAR USUÁRIOS DO GRUPO ADMINISTRATORS
+
+	$> lookupnames administrators
+		administrators S-1-5-32-544 (Local Group: 4)
+
+	$> queryaliasmem builtin 544
+		sid:[COPIAR NUMERO GRANDE DO USUARIO]
+		sid:[COPIAR NUMERO GRANDE DO USUARIO]
+
+	$> lookupids COLAR NUMERO GRADE DO USUARIO
+		[NUMERO GRANDE]\nomedousuario
+
+CARREGAR MAIS INFORMAÇÕES DE UM USUÁRIO
+
+	$> queryuser 500

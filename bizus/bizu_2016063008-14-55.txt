@@ -1,0 +1,26 @@
+### LISTA PARA DE SITES PARA QUEBRAR SENHAS E HASHS ONLINE ###
+
+- CRACKSTATION
+
+	LM, NTLM, md2, md4, md5, md5(md5_hex), md5-half, sha1, sha224, sha256, sha384, sha512, ripeMD160, whirlpool, MySQL 4.1+ (sha1(sha1_bin))
+
+	- https://crackstation.net/
+
+- HASHKILLER
+	
+	MD5 - https://hashkiller.co.uk/md5-decrypter.aspx
+	NTLM - https://hashkiller.co.uk/ntlm-decrypter.aspx
+	SHA1 - https://hashkiller.co.uk/sha1-decrypter.aspx
+
+- OPHCRACK
+	
+	SENHAS DO LINUX - https://www.objectif-securite.ch/en/ophcrack.php
+
+- CRYPTO
+	
+	- VÁRIAS CRIPTOS
+	http://crypo.bz.ms/encryptors
+
+- XOR ARQUIVOS
+
+	https://wiremask.eu/tools/xor-cracker/

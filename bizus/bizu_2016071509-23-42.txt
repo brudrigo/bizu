@@ -1,0 +1,23 @@
+#############################################
+#											#
+#			COMANDOS COM O GDB				#
+#											#
+#############################################
+
+
+- Abrir aplicação com o gdb
+
+	gdb NOMEDAAPLICACAO
+	gdb ./stack5
+
+- Reiniciar o programa
+
+	(gdb) r
+
+- Visualizar os registros quando crashou
+
+	(gdb) i r
+
+- Checar um registro específico
+
+	(gdb) x/1x $esp

@@ -1,0 +1,11 @@
+STEGSLOVE USAGE
+
+cd /root/Documentos/Ferramentas
+java -jar Stegslove.jar /caminho da imagem/
+
+
+STEGHIDE
+
+steghide extract -sf picture.jpg -xf secret.txt
+
+Exiftools

@@ -1,0 +1,13 @@
+Ferramenta para engenharia reversa de aplicações android, decodifica recursos contidos no apk e permite a reempacotação da aplicação depois das alterações
+
+
+ANÁLISE COM O ANDROLYZE.PY
+
+- $ androlyze -s
+- a,d,dx = AnalyzeAPK("/path/to/app", decompiler="dad")
+
+a.get_activities()
+a.get_permissions()
+d.get_classes_names()
+d.get_strings()
+d.get_methods()

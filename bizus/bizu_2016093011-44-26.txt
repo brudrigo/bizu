@@ -1,0 +1,3 @@
+volatility -f /etc/teste.dd imageinfo
+
+volatility --profile=Win7sp -f /caminho.dd MODULO

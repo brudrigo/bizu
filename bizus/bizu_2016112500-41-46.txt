@@ -1,0 +1,8 @@
+Turn your computer on.
+Press ESC at the GRUB prompt.
+Press e for edit.
+Highlight the line that begins kernel ......... or linux ........, press e
+Go to the very end of the line and add rw init=/bin/bash
+Press Enter, then press b to boot your system. Your system will boot up to a passwordless root shell.1
+Now issue the command passwd username *where "username" is the user for which you want to change the password.
+Then you will be asked to give new password

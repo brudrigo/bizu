@@ -1,0 +1,1 @@
+meterpreter> use mimekats  ---PEGA AS SENHAS DOS USUÁRIOS QUE LOGARAM EUM UMA MÁQUINA WINDOWS

