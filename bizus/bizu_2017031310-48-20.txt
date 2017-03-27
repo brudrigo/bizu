@@ -1,0 +1,17 @@
+------------------------------------------------------
+COMANDO PARA CRIAR UM SERVIDOR SMTP SIMPLES EM PYTHON
+------------------------------------------------------
+
+python -m smtpd -n -c DebuggingServer 192.168.98.46:25
+
+python -m smtpd -n -c DebuggingServer IPDAINTERFACE:PORTA
+
+printa o conteúdo do e-mail recebido 
+exemplo de email: atacante@192.168.98.46
+
+------------------------------------------------------
+  COMANDO PARA ENVIAR E-MAIL UTILIZANDO UM SV SMTP
+------------------------------------------------------
+sendEmail -t admin@victim.com -f attacker@victim.com -s 192.168.99.175 -u Important -o message-file=01.html -o tls=no
+
+sendEmail -t admin@victim.com -f attacker@victim.com -s <smtpServer> -u Important -o message-file=01.html -o tls=no
